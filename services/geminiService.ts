@@ -72,6 +72,9 @@ export const enhancePrompt = async (
   material?: MaterialOption,
   language: Language = 'th'
 ): Promise<{ prompt: string, blessing: string, fontStyleTag?: string }> => {
+  if (!process.env.API_KEY) {
+     throw new Error("API_KEY_ERROR: Missing API Key.");
+  }
   const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
 
   // 1. LOOKUP AMULET DICTIONARY
@@ -169,13 +172,19 @@ export const enhancePrompt = async (
   } catch (error: any) {
     // Graceful handling of Quota Limits or Rate Limits
     const errString = (error.message || "") + (error.toString() || "");
-    if (errString.includes('429') || errString.includes('quota') || errString.includes('RESOURCE_EXHAUSTED')) {
-        console.warn("Quota exceeded during prompt enhancement. Using fallback prompt.");
-    } else {
-        console.error("Prompt enhancement failed:", error);
-    }
     
-    // Return Fallback
+    // Check if it's a critical error we want to bubble up (like API Key)
+    if (errString.includes('API_KEY') || errString.includes('403') || errString.includes('UNAUTHENTICATED')) {
+        throw new Error("API_KEY_ERROR: The system cannot find a valid API Key.");
+    }
+    // Check for 429
+    if (errString.includes('429') || errString.includes('RESOURCE_EXHAUSTED')) {
+        throw new Error("QUOTA_ERROR: Server busy.");
+    }
+
+    console.warn("Enhance Prompt Error (Using Fallback):", errString);
+
+    // Fallback Logic
     // Even in fallback, we use the Dictionary description if available
     const fallbackSubject = explicitVisualReference ? `${explicitVisualReference} (${userInput})` : userInput;
     const materialStr = material ? material.promptModifier : "";
@@ -207,10 +216,6 @@ const cleanRawInput = (input: string): string => {
     const regex = new RegExp(phrase, 'gi');
     cleaned = cleaned.replace(regex, "");
   });
-
-  // 2. Extra safety: if the result is still very long but contains common English connecting words 
-  // without substantive keywords, it might be a sentence fragment from the UI description.
-  // We don't have a full NLP here, but we can trim extra whitespace.
   
   return cleaned.replace(/\s+/g, ' ').trim();
 };
@@ -277,6 +282,9 @@ export const generateImage = async (
   referenceImageBase64?: string,
   styleId?: string
 ): Promise<string> => {
+  if (!process.env.API_KEY) {
+      throw new Error("API_KEY_ERROR: Missing API Key.");
+  }
   const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
   
   // Base Negative Prompt (Safety & Quality Guardrails)
@@ -364,6 +372,7 @@ export const reverseEngineerPrompt = async (
     base64Image: string, 
     language: Language = 'th'
 ): Promise<{ prompt: string, analysis: string }> => {
+  if (!process.env.API_KEY) throw new Error("API_KEY_ERROR");
   const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
 
   const systemInstruction = `
@@ -432,6 +441,11 @@ export const getDailyFortune = async (
     promptDescription: string, 
     language: Language = 'th'
 ): Promise<FortuneResult> => {
+  if (!process.env.API_KEY) {
+      // Offline fallback immediate if no key
+      const list = OFFLINE_FORTUNES[language];
+      return list[Math.floor(Math.random() * list.length)];
+  }
   const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
 
   const systemInstruction = `

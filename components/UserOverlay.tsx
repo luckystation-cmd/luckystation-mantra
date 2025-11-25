@@ -2,9 +2,10 @@
 import React, { useState, useEffect } from 'react';
 import { useUser } from '../contexts/UserContext';
 import { Language } from '../types';
+import { UI_STRINGS } from '../constants';
 
 interface UserOverlayProps {
-  type: 'LOGIN' | 'STORE'; // Removed API_KEY
+  type: 'LOGIN' | 'STORE';
   isOpen: boolean;
   onClose: () => void;
   language: Language;
@@ -14,6 +15,7 @@ const UserOverlay: React.FC<UserOverlayProps> = ({ type, isOpen, onClose, langua
   const { login, user, watchAd, claimDailyReward, canClaimDaily } = useUser();
   const [isWatchingAd, setIsWatchingAd] = useState(false);
   const [adTimer, setAdTimer] = useState(3);
+  const t = UI_STRINGS[language];
 
   useEffect(() => {
     if (isOpen) {
@@ -96,22 +98,20 @@ const UserOverlay: React.FC<UserOverlayProps> = ({ type, isOpen, onClose, langua
                             {language === 'th' ? 'เข้าสู่ระบบ' : 'Sign In'}
                         </h2>
                         <p className="text-gray-400 text-sm">
-                            {language === 'th' 
-                             ? 'เพื่อบันทึกประวัติและสะสมแต้มบุญ' 
-                             : 'To save history and collect credits.'}
+                            {t.sign_in_desc}
                         </p>
                     </div>
 
-                    <div className="space-y-4">
+                    <div className="space-y-4 pt-2">
                         <button 
                             onClick={handleLogin}
                             className="w-full py-4 rounded-xl bg-white text-gray-700 font-bold shadow-lg hover:bg-gray-100 transition-all flex items-center justify-center gap-3 active:scale-95"
                         >
                             <img src="https://www.svgrepo.com/show/475656/google-color.svg" alt="Google" className="w-6 h-6" />
-                            <span>Sign in with Google</span>
+                            <span>{t.sign_in_google}</span>
                         </button>
                         <p className="text-[10px] text-gray-500">
-                           By signing in, you agree to our Terms of Service.
+                           {language === 'th' ? 'จำลองการเข้าสู่ระบบเพื่อความสะดวกรวดเร็ว (ไม่มีการเก็บข้อมูลจริง)' : 'Simulated login for quick access (No real data stored).'}
                         </p>
                     </div>
                 </>
@@ -121,7 +121,7 @@ const UserOverlay: React.FC<UserOverlayProps> = ({ type, isOpen, onClose, langua
                 <>
                    <div className="space-y-1">
                         <h2 className="text-xl font-bold text-white">
-                            {language === 'th' ? 'เติมพลังบุญ' : 'Top-up Credits'}
+                            {t.top_up_title}
                         </h2>
                         <div className="text-4xl font-bold text-amber-400 drop-shadow-md">
                              {user.credits} <span className="text-sm text-gray-400">Coins</span>
@@ -142,8 +142,8 @@ const UserOverlay: React.FC<UserOverlayProps> = ({ type, isOpen, onClose, langua
                             <div className="flex items-center gap-3">
                                 <span className="text-2xl">📅</span>
                                 <div className="text-left">
-                                    <div className="text-white font-bold text-sm">Daily Login</div>
-                                    <div className="text-[10px] text-gray-400">{canClaimDaily ? 'Available Now' : 'Come back tomorrow'}</div>
+                                    <div className="text-white font-bold text-sm">{t.daily_reward}</div>
+                                    <div className="text-[10px] text-gray-400">{canClaimDaily ? (language === 'th' ? 'กดรับได้เลย' : 'Available Now') : (language === 'th' ? 'พรุ่งนี้มาใหม่' : 'Come back tomorrow')}</div>
                                 </div>
                             </div>
                             <div className="px-3 py-1 bg-green-500 text-black font-bold text-xs rounded-full">
@@ -159,8 +159,8 @@ const UserOverlay: React.FC<UserOverlayProps> = ({ type, isOpen, onClose, langua
                             <div className="flex items-center gap-3">
                                 <span className="text-2xl">🎬</span>
                                 <div className="text-left">
-                                    <div className="text-white font-bold text-sm">Watch Ad</div>
-                                    <div className="text-[10px] text-gray-400">Support us & get reward</div>
+                                    <div className="text-white font-bold text-sm">{t.watch_ad}</div>
+                                    <div className="text-[10px] text-gray-400">{language === 'th' ? 'สนับสนุนเรา & รับแต้ม' : 'Support us & get reward'}</div>
                                 </div>
                             </div>
                             <div className="px-3 py-1 bg-purple-500 text-white font-bold text-xs rounded-full">
@@ -169,7 +169,7 @@ const UserOverlay: React.FC<UserOverlayProps> = ({ type, isOpen, onClose, langua
                          </button>
                          
                          <div className="text-[10px] text-gray-500 pt-2">
-                            {language === 'th' ? 'เหรียญใช้สำหรับเล่นสนุกเท่านั้น ไม่มีการหักเงินจริง' : 'Credits are for gamification only. No real money involved.'}
+                            {t.credits_desc}
                          </div>
                     </div>
                 </>

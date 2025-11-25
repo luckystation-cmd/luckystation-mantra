@@ -25,10 +25,15 @@ export const UI_STRINGS = {
     // UPDATED ERROR MESSAGES
     error_msg: "❌ System Error.",
     error_msg_hint: "Tip: Check internet or try a shorter prompt.",
-    safety_error_msg: "⚠️ Safety Block: The AI refused this prompt.\n💡 FIX: Try disabling 'Magic Mode' or remove sensitive words (violence, nudity).",
+    safety_error_msg: "⚠️ Safety Block: The AI refused this prompt.\n💡 FIX: Try disabling 'Magic Mode' or remove sensitive words.",
     quota_msg: "⚠️ Server Busy (Quota Exceeded).\n💡 FIX: Please wait 60 seconds before trying again.",
-    apikey_msg: "⚠️ API Key / Permission Error.\n💡 FIX: Check your API Key configuration.",
+    apikey_msg: "⚠️ API Key Error (Permission Denied).\n💡 FIX: Please check your project's Environment Variables (API_KEY).",
     bad_req_msg: "⚠️ Invalid Request (400).\n💡 FIX: Prompt might be too long or invalid.",
+    network_msg: "❌ Network Error.\n💡 FIX: Please check your internet connection.",
+    
+    // Actions
+    retry_btn: "🔄 Retry",
+    disable_magic_btn: "⚡ Disable Magic (Raw Mode)",
     
     // Magic Toggle
     magic_mode_on: "Magic ON ✨",
@@ -79,6 +84,14 @@ export const UI_STRINGS = {
     enhancing_desc: "AI is adding spiritual details...",
     generating_title: "Generating Image...",
     generating_desc: "Manifesting your vision...",
+
+    // User/Auth
+    sign_in_google: "Sign in with Google",
+    sign_in_desc: "Sign in to save your sacred collection and credits.",
+    top_up_title: "Divine Credits",
+    daily_reward: "Daily Login",
+    watch_ad: "Watch Ad",
+    credits_desc: "Credits are for simulation only (Free).",
   },
   th: {
     generate_tab: "🎨 สร้างภาพ",
@@ -101,11 +114,16 @@ export const UI_STRINGS = {
     // UPDATED ERROR MESSAGES
     error_msg: "❌ เกิดข้อผิดพลาดในระบบ",
     error_msg_hint: "คำแนะนำ: เช็คอินเทอร์เน็ต หรือลองเปลี่ยนคำ",
-    safety_error_msg: "⚠️ ติดเงื่อนไขความปลอดภัย (Safety Block)\n💡 วิธีแก้: ลองปิดโหมด 'Magic (AI)' หรือลบคำที่ดูรุนแรง/ล่อแหลมออก",
-    quota_msg: "⚠️ ระบบทำงานหนัก (Quota เต็ม)\n💡 วิธีแก้: กรุณารอ 1 นาที แล้วลองกดใหม่ครับ",
-    apikey_msg: "⚠️ ปัญหาที่สิทธิ์การเข้าถึง (API Key/Permission)\n💡 วิธีแก้: ตรวจสอบการตั้งค่า API Key",
+    safety_error_msg: "⚠️ ติดเงื่อนไขความปลอดภัย (Safety Block)\n💡 วิธีแก้: AI ปฏิเสธคำขอนี้ ลองกดปุ่ม 'ปิด Magic Mode' ด้านล่าง หรือลบคำที่ดูรุนแรงออก",
+    quota_msg: "⚠️ ระบบทำงานหนัก (Quota เต็ม)\n💡 วิธีแก้: กรุณารอ 1 นาที แล้วลองกดปุ่ม 'ลองใหม่'",
+    apikey_msg: "⚠️ ไม่พบกุญแจเข้าระบบ (API Key Error)\n💡 วิธีแก้: ระบบหารหัส API Key ไม่เจอ กรุณาตรวจสอบการตั้งค่า Environment Variables ใน Vercel/Project",
     bad_req_msg: "⚠️ คำสั่งไม่ถูกต้อง (400 Bad Request)\n💡 วิธีแก้: คำสั่งอาจยาวเกินไป หรือมีตัวอักษรแปลกปลอม",
+    network_msg: "❌ ไม่สามารถเชื่อมต่อได้\n💡 วิธีแก้: กรุณาตรวจสอบอินเทอร์เน็ตของคุณ",
     
+    // Actions
+    retry_btn: "🔄 ลองใหม่",
+    disable_magic_btn: "⚡ ปิด Magic (โหมดดิบ)",
+
     // Magic Toggle
     magic_mode_on: "เปิดมนตร์ (AI) ✨",
     magic_mode_off: "โหมดดิบ (Raw) ⚡",
@@ -155,6 +173,14 @@ export const UI_STRINGS = {
     enhancing_desc: "AI กำลังขยายความศักดิ์สิทธิ์ให้คำขอของคุณ",
     generating_title: "กำลังเนรมิต...",
     generating_desc: "วาดภาพจากจินตนาการ...",
+
+    // User/Auth
+    sign_in_google: "เข้าสู่ระบบด้วย Google",
+    sign_in_desc: "เข้าสู่ระบบจำลอง (Simulation) เพื่อบันทึกแต้มบุญ",
+    top_up_title: "เติมแต้มบุญ",
+    daily_reward: "เช็คชื่อรายวัน",
+    watch_ad: "ดูโฆษณาเพิ่มแต้ม",
+    credits_desc: "เหรียญใช้สำหรับเล่นสนุกเท่านั้น (ฟรี)",
   }
 };
 

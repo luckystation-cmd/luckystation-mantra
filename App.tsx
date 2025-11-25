@@ -153,24 +153,25 @@ const InnerApp: React.FC = () => {
       }
       // 5. NETWORK
       else if (errString.includes('NETWORK') || errString.includes('FETCH')) {
-          msg = language === 'th' ? "❌ ไม่สามารถเชื่อมต่อได้ เช็คอินเทอร์เน็ต" : "❌ Network Error. Check connection.";
+          msg = t.network_msg;
       }
 
       // Append Technical Detail if it's the Generic Error (Help user understand WHY)
+      // This specifically addresses the "Why is there an error?" question
       if (msg === t.error_msg && error.message) {
          const shortErr = error.message.length > 80 ? error.message.substring(0, 80) + "..." : error.message;
-         msg += `\n[Log]: ${shortErr}`;
+         msg += `\n[Debug]: ${shortErr}`;
       } else if (msg === t.error_msg) {
          msg += `\n${t.error_msg_hint}`;
       }
 
       setErrorMessage(msg);
 
-      // Extend display time to 8 seconds so user can read the solution
+      // Extend display time to 12 seconds so user can read the solution and click Retry
       setTimeout(() => {
         setStatus(prev => prev === AppStatus.ERROR ? AppStatus.IDLE : prev);
         setErrorMessage(null);
-      }, 8000);
+      }, 12000);
     }
   };
 
@@ -456,31 +457,37 @@ const InnerApp: React.FC = () => {
                 <div className="whitespace-pre-line text-sm font-medium leading-relaxed opacity-90 break-words">
                     {errorMessage}
                 </div>
-                {/* SMART ACTION BUTTON */}
-                {(errorMessage?.includes('Safety') || errorMessage?.includes('ความปลอดภัย')) && (
-                    <button 
-                        onClick={() => {
-                            setIsMagicEnabled(false);
-                            setErrorMessage(null);
-                            // User needs to tap Generate again, but we set the state
-                        }}
-                        className="mt-2 text-xs bg-white text-red-900 font-bold px-3 py-1.5 rounded-lg hover:bg-red-100 transition-colors"
-                    >
-                         {language === 'th' ? '⚡ ปิด Magic (Raw Mode)' : '⚡ Disable Magic'}
-                    </button>
-                )}
-                {(errorMessage?.includes('Quota') || errorMessage?.includes('Server Busy')) && (
-                    <button 
-                         onClick={() => {
-                             setErrorMessage(null);
-                             handleGenerate();
-                         }}
-                         className="mt-2 text-xs bg-white text-red-900 font-bold px-3 py-1.5 rounded-lg hover:bg-red-100 transition-colors"
-                    >
-                         {language === 'th' ? '🔄 ลองใหม่' : '🔄 Retry'}
-                    </button>
-                )}
+                
+                {/* SMART ACTION BUTTONS */}
+                <div className="flex gap-2 mt-2 flex-wrap">
+                    {/* Safety Action: Disable Magic */}
+                    {(errorMessage?.includes('Safety') || errorMessage?.includes('ความปลอดภัย')) && (
+                        <button 
+                            onClick={() => {
+                                setIsMagicEnabled(false);
+                                setErrorMessage(null);
+                            }}
+                            className="text-xs bg-white text-red-900 font-bold px-3 py-1.5 rounded-lg hover:bg-red-100 transition-colors shadow-sm"
+                        >
+                            {t.disable_magic_btn}
+                        </button>
+                    )}
+                    
+                    {/* Retry Action: For Quota/Network/Generic */}
+                    {(errorMessage?.includes('Quota') || errorMessage?.includes('Server Busy') || errorMessage?.includes('Network') || errorMessage?.includes('เชื่อมต่อ') || errorMessage?.includes('Debug')) && (
+                        <button 
+                            onClick={() => {
+                                setErrorMessage(null);
+                                handleGenerate();
+                            }}
+                            className="text-xs bg-white text-red-900 font-bold px-3 py-1.5 rounded-lg hover:bg-red-100 transition-colors shadow-sm"
+                        >
+                            {t.retry_btn}
+                        </button>
+                    )}
+                </div>
             </div>
+            
             <button 
                 onClick={() => setErrorMessage(null)} 
                 className="p-1 text-white/40 hover:text-white transition-colors"
