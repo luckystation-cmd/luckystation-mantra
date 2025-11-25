@@ -23,9 +23,12 @@ export const UI_STRINGS = {
     powered_by: "Powered by Gemini • Luckystation",
     
     // UPDATED ERROR MESSAGES
-    error_msg: "❌ System Error.\n💡 FIX: Check your internet connection or try a shorter prompt.",
+    error_msg: "❌ System Error.",
+    error_msg_hint: "Tip: Check internet or try a shorter prompt.",
     safety_error_msg: "⚠️ Safety Block: The AI refused this prompt.\n💡 FIX: Try disabling 'Magic Mode' or remove sensitive words (violence, nudity).",
     quota_msg: "⚠️ Server Busy (Quota Exceeded).\n💡 FIX: Please wait 60 seconds before trying again.",
+    apikey_msg: "⚠️ API Key / Permission Error.\n💡 FIX: Check your API Key configuration.",
+    bad_req_msg: "⚠️ Invalid Request (400).\n💡 FIX: Prompt might be too long or invalid.",
     
     // Magic Toggle
     magic_mode_on: "Magic ON ✨",
@@ -96,9 +99,12 @@ export const UI_STRINGS = {
     powered_by: "ขับเคลื่อนด้วย Gemini • Luckystation",
     
     // UPDATED ERROR MESSAGES
-    error_msg: "❌ เกิดข้อผิดพลาด\n💡 วิธีแก้: เช็คอินเทอร์เน็ต หรือลองเปลี่ยนคำสั่งให้สั้นลง",
+    error_msg: "❌ เกิดข้อผิดพลาดในระบบ",
+    error_msg_hint: "คำแนะนำ: เช็คอินเทอร์เน็ต หรือลองเปลี่ยนคำ",
     safety_error_msg: "⚠️ ติดเงื่อนไขความปลอดภัย (Safety Block)\n💡 วิธีแก้: ลองปิดโหมด 'Magic (AI)' หรือลบคำที่ดูรุนแรง/ล่อแหลมออก",
     quota_msg: "⚠️ ระบบทำงานหนัก (Quota เต็ม)\n💡 วิธีแก้: กรุณารอ 1 นาที แล้วลองกดใหม่ครับ",
+    apikey_msg: "⚠️ ปัญหาที่สิทธิ์การเข้าถึง (API Key/Permission)\n💡 วิธีแก้: ตรวจสอบการตั้งค่า API Key",
+    bad_req_msg: "⚠️ คำสั่งไม่ถูกต้อง (400 Bad Request)\n💡 วิธีแก้: คำสั่งอาจยาวเกินไป หรือมีตัวอักษรแปลกปลอม",
     
     // Magic Toggle
     magic_mode_on: "เปิดมนตร์ (AI) ✨",

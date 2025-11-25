@@ -103,6 +103,10 @@ const InnerApp: React.FC = () => {
 
       setStatus(AppStatus.GENERATING);
 
+      if (!finalPrompt) {
+          throw new Error("Failed to generate prompt. Please try again.");
+      }
+
       // 2. Generate Image
       const imageUrl = await generateImage(finalPrompt, "9:16", referenceImage || undefined, selectedStyle.id);
       
@@ -139,9 +143,25 @@ const InnerApp: React.FC = () => {
       else if (errString.includes('429') || errString.includes('QUOTA') || errString.includes('RESOURCE_EXHAUSTED')) {
           msg = t.quota_msg;
       }
-      // 3. NETWORK
+      // 3. KEY / PERMISSION ISSUES (Specific Diagnosis)
+      else if (errString.includes('KEY') || errString.includes('PERMISSION') || errString.includes('UNAUTHENTICATED') || errString.includes('403')) {
+          msg = t.apikey_msg;
+      }
+      // 4. BAD REQUEST (Invalid Prompt/Settings)
+      else if (errString.includes('400') || errString.includes('INVALID_ARGUMENT')) {
+          msg = t.bad_req_msg;
+      }
+      // 5. NETWORK
       else if (errString.includes('NETWORK') || errString.includes('FETCH')) {
           msg = language === 'th' ? "❌ ไม่สามารถเชื่อมต่อได้ เช็คอินเทอร์เน็ต" : "❌ Network Error. Check connection.";
+      }
+
+      // Append Technical Detail if it's the Generic Error (Help user understand WHY)
+      if (msg === t.error_msg && error.message) {
+         const shortErr = error.message.length > 80 ? error.message.substring(0, 80) + "..." : error.message;
+         msg += `\n[Log]: ${shortErr}`;
+      } else if (msg === t.error_msg) {
+         msg += `\n${t.error_msg_hint}`;
       }
 
       setErrorMessage(msg);
@@ -433,7 +453,7 @@ const InnerApp: React.FC = () => {
                 <span className="text-xl">⚠️</span>
             </div>
             <div className="flex-1">
-                <div className="whitespace-pre-line text-sm font-medium leading-relaxed opacity-90">
+                <div className="whitespace-pre-line text-sm font-medium leading-relaxed opacity-90 break-words">
                     {errorMessage}
                 </div>
                 {/* SMART ACTION BUTTON */}
