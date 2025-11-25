@@ -1,5 +1,5 @@
 
-import { GoogleGenAI, Type } from "@google/genai";
+import { GoogleGenAI, Type, HarmCategory, HarmBlockThreshold } from "@google/genai";
 import { StyleOption, OriginOption, MaterialOption, FortuneResult, Language } from "../types";
 
 // --- AMULET DICTIONARY (Knowledge Base) ---
@@ -92,6 +92,12 @@ export const enhancePrompt = async (
       **Role:** Divine Digital Artist & Prompt Engineer (Specialist in Thai/Asian Sacred Art).
 
       **Objective:** Construct a high-fidelity image generation prompt based on User Inputs and strict Visual Rules.
+
+      **SAFETY PROTOCOL (STRICT):**
+      - The output prompt MUST be Safe For Work (SFW).
+      - NO nudity, NO sexual content, NO gore, NO excessive violence.
+      - If the user asks for something sensitive (e.g. "Love spell", "Charming oil"), sanitize it to be artistic, symbolic, and magical (e.g. "Glowing pink aura", "Flowers") instead of explicit.
+      - Do not use words like "blood", "kill", "naked", "erotic".
 
       **INPUTS:**
       - [Keyword]: "${userInput}"
@@ -279,7 +285,7 @@ export const generateImage = async (
   
   // Base Negative Prompt (Safety & Quality Guardrails)
   // UPDATED: Aggressive exclusions for UI elements (The Pixlr Fix)
-  let negativeConstraints = "Distorted face, extra legs, extra fingers, fused limbs, bad anatomy, blurry, watermark, text, low quality, cropped, missing limbs, floating limbs, disconnected limbs, mutation, ugly, disgusting, amputation, User Interface, UI, Mobile App, Screen, Screenshot, Website, Buttons, Menu, Navigation Bar, Pop-up, Error Message, Notification, Text Overlay, Copyright info, Toggle, Icons, Status bar";
+  let negativeConstraints = "Distorted face, extra legs, extra fingers, fused limbs, bad anatomy, blurry, watermark, text, low quality, cropped, missing limbs, floating limbs, disconnected limbs, mutation, ugly, disgusting, amputation, User Interface, UI, Mobile App, Screen, Screenshot, Website, Buttons, Menu, Navigation Bar, Pop-up, Error Message, Notification, Text Overlay, Copyright info, Toggle, Icons, Status bar, nudity, sexually explicit, nsfw, gore, blood";
 
   const promptLower = prompt.toLowerCase();
 
@@ -324,24 +330,29 @@ export const generateImage = async (
         systemInstruction: "You are a professional digital artist. Generate high-quality images. Do not generate text in the image.",
         imageConfig: { aspectRatio: aspectRatio },
         safetySettings: [
-          { category: 'HARM_CATEGORY_HARASSMENT', threshold: 'BLOCK_ONLY_HIGH' },
-          { category: 'HARM_CATEGORY_HATE_SPEECH', threshold: 'BLOCK_ONLY_HIGH' },
-          { category: 'HARM_CATEGORY_SEXUALLY_EXPLICIT', threshold: 'BLOCK_ONLY_HIGH' },
-          { category: 'HARM_CATEGORY_DANGEROUS_CONTENT', threshold: 'BLOCK_ONLY_HIGH' },
+          { category: HarmCategory.HARM_CATEGORY_HARASSMENT, threshold: HarmBlockThreshold.BLOCK_ONLY_HIGH },
+          { category: HarmCategory.HARM_CATEGORY_HATE_SPEECH, threshold: HarmBlockThreshold.BLOCK_ONLY_HIGH },
+          { category: HarmCategory.HARM_CATEGORY_SEXUALLY_EXPLICIT, threshold: HarmBlockThreshold.BLOCK_ONLY_HIGH },
+          { category: HarmCategory.HARM_CATEGORY_DANGEROUS_CONTENT, threshold: HarmBlockThreshold.BLOCK_ONLY_HIGH },
         ]
       }
     });
 
     const candidate = response.candidates?.[0];
     if (!candidate) throw new Error("API returned no candidates.");
-    if (candidate.finishReason === 'SAFETY') throw new Error("Generation blocked by safety settings.");
+    
+    // Explicitly Check for Safety Block or Filtered Content
+    if (candidate.finishReason === 'SAFETY' || candidate.finishReason === 'RECITATION') {
+        throw new Error("SAFETY_BLOCK: The AI refused to generate this image due to safety guidelines.");
+    }
 
     if (candidate.content && candidate.content.parts) {
         for (const part of candidate.content.parts) {
           if (part.inlineData) return `data:image/png;base64,${part.inlineData.data}`;
         }
     }
-    throw new Error("No image data returned from API.");
+    // If no parts found but no explicit finishReason safety error, it might still be a safety filter returning empty content
+    throw new Error("SAFETY_BLOCK: The generated image was filtered out.");
 
   } catch (error) {
     console.error("Image generation failed:", error);

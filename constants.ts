@@ -1,3 +1,4 @@
+
 import { StyleOption, OriginOption, MaterialOption } from './types';
 
 export const APP_NAME = "Luckystation";
@@ -20,8 +21,11 @@ export const UI_STRINGS = {
     generate_btn_idle: "Generate Mantra 🔮",
     generate_btn_loading: "Manifesting...",
     powered_by: "Powered by Gemini • Luckystation",
-    error_msg: "Error generating image. Please try again (Safety check triggered).",
-    quota_msg: "Server traffic is high (Quota Limit). Please wait a moment and try again.",
+    
+    // UPDATED ERROR MESSAGES
+    error_msg: "❌ System Error.\n💡 FIX: Check your internet connection or try a shorter prompt.",
+    safety_error_msg: "⚠️ Safety Block: The AI refused this prompt.\n💡 FIX: Try disabling 'Magic Mode' or remove sensitive words (violence, nudity).",
+    quota_msg: "⚠️ Server Busy (Quota Exceeded).\n💡 FIX: Please wait 60 seconds before trying again.",
     
     // Magic Toggle
     magic_mode_on: "Magic ON ✨",
@@ -90,8 +94,11 @@ export const UI_STRINGS = {
     generate_btn_idle: "เริ่มร่ายมนต์ 🔮",
     generate_btn_loading: "กำลังร่ายมนต์...",
     powered_by: "ขับเคลื่อนด้วย Gemini • Luckystation",
-    error_msg: "เกิดข้อผิดพลาดในการสร้างภาพ (อาจติดเงื่อนไขความปลอดภัย)",
-    quota_msg: "ขณะนี้มีผู้ใช้งานจำนวนมาก (Quota เต็ม) กรุณารอสักครู่แล้วลองใหม่",
+    
+    // UPDATED ERROR MESSAGES
+    error_msg: "❌ เกิดข้อผิดพลาด\n💡 วิธีแก้: เช็คอินเทอร์เน็ต หรือลองเปลี่ยนคำสั่งให้สั้นลง",
+    safety_error_msg: "⚠️ ติดเงื่อนไขความปลอดภัย (Safety Block)\n💡 วิธีแก้: ลองปิดโหมด 'Magic (AI)' หรือลบคำที่ดูรุนแรง/ล่อแหลมออก",
+    quota_msg: "⚠️ ระบบทำงานหนัก (Quota เต็ม)\n💡 วิธีแก้: กรุณารอ 1 นาที แล้วลองกดใหม่ครับ",
     
     // Magic Toggle
     magic_mode_on: "เปิดมนตร์ (AI) ✨",
@@ -295,7 +302,7 @@ export const STYLES: StyleOption[] = [
     name_th: 'พระเนื้อดิน (Clay)',
     description: 'Ancient clay, gold leaf, macro.',
     description_th: 'เนื้อดินเผาโบราณ ปิดทอง ขลัง',
-    promptModifier: 'Macro shot of a sacred amulet, cracked clay texture, gold leaf application, ancient inscriptions, soft bokeh background, spiritual energy',
+    promptModifier: 'Macro photography of a sacred amulet, cracked clay texture, gold leaf application, ancient inscriptions, soft bokeh background, spiritual energy',
     icon: '🔮',
     color: 'from-orange-400 to-red-600'
   }
