@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <title>Luckystation</title>
+    <!-- Sacred Golden OM Favicon -->
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><defs><linearGradient id=%22gold%22 x1=%220%25%22 y1=%220%25%22 x2=%22100%25%22 y2=%22100%25%22><stop offset=%220%25%22 stop-color=%22%23FFD700%22/><stop offset=%2250%25%22 stop-color=%22%23B8860B%22/><stop offset=%22100%25%22 stop-color=%22%23FFFFE0%22/></linearGradient></defs><rect width=%22100%22 height=%22100%22 rx=%2225%22 fill=%22%230a0a0a%22 stroke=%22url(%23gold)%22 stroke-width=%222%22/><text x=%2250%22 y=%2265%22 font-family=%22serif%22 font-size=%2260%22 text-anchor=%22middle%22 fill=%22url(%23gold)%22 style=%22filter: drop-shadow(0px 0px 5px rgba(255, 215, 0, 0.5));%22>🕉️</text></svg>">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Charm:wght@400;700&family=Mitr:wght@400;600&family=Niramit:wght@400;600&family=Prompt:wght@300;400;500;600&family=Mali:wght@400;600;700&family=Srisakdi:wght@400;700&family=Pridi:wght@400;600;700&family=Maitree:wght@400;600;700&family=Cinzel:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+      body {
+        font-family: 'Prompt', sans-serif;
+        background-color: #000;
+        color: #fff;
+        -webkit-font-smoothing: antialiased;
+      }
+      
+      /* Custom scrollbar styling (Sleek & High-tech) */
+      ::-webkit-scrollbar {
+        width: 6px;      /* Vertical width */
+        height: 6px;     /* Horizontal height */
+      }
+      ::-webkit-scrollbar-track {
+        background: rgba(255, 255, 255, 0.05); /* Increased opacity */
+        border-radius: 10px;
+        margin: 0 10px; /* Slight indent */
+      }
+      ::-webkit-scrollbar-thumb {
+        background: rgba(255, 255, 255, 0.3); /* Increased opacity */
+        border-radius: 10px;
+        transition: background 0.3s ease;
+      }
+      ::-webkit-scrollbar-thumb:hover {
+        background: rgba(255, 255, 255, 0.5); /* Lighter on hover */
+      }
+      
+      /* Gradient Mask for Horizontal Lists */
+      .mask-gradient-right {
+        mask-image: linear-gradient(to right, black 85%, transparent 100%);
+        -webkit-mask-image: linear-gradient(to right, black 85%, transparent 100%);
+      }
+
+      /* Glass Panel Effect */
+      .glass-panel {
+        background: rgba(20, 20, 30, 0.6);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+      }
+
+      /* Animations */
+      @keyframes fadeIn {
+        from { opacity: 0; }
+        to { opacity: 1; }
+      }
+      .animate-fadeIn {
+        animation: fadeIn 0.5s ease-out forwards;
+      }
+
+      @keyframes slideUp {
+        from { opacity: 0; transform: translateY(20px); }
+        to { opacity: 1; transform: translateY(0); }
+      }
+      .animate-slideUp {
+        animation: slideUp 0.6s ease-out forwards;
+      }
+      
+      @keyframes slideDown {
+        from { opacity: 0; transform: translateY(-20px); }
+        to { opacity: 1; transform: translateY(0); }
+      }
+      .animate-slideDown {
+        animation: slideDown 0.4s ease-out forwards;
+      }
+
+      /* Delays */
+      .delay-100 { animation-delay: 100ms; }
+    </style>
+  <script type="importmap">
+{
+  "imports": {
+    "react": "https://aistudiocdn.com/react@^19.2.0",
+    "react-dom/": "https://aistudiocdn.com/react-dom@^19.2.0/",
+    "react/": "https://aistudiocdn.com/react@^19.2.0/",
+    "@google/genai": "https://aistudiocdn.com/@google/genai@^1.30.0"
+  }
+}
+</script>
+<link rel="stylesheet" href="/index.css">
+</head>
+  <body>
+    <div id="root"></div>
+  <script type="module" src="/index.tsx"></script>
+</body>
+</html>
