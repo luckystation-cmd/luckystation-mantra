@@ -4,7 +4,6 @@ import { GeneratedImage, FortuneResult, Language } from '../types';
 import { getDailyFortune } from '../services/geminiService';
 import { audioService } from '../services/audioService';
 import { UI_STRINGS } from '../constants';
-import { useUser } from '../contexts/UserContext';
 
 interface AltarViewProps {
   image: GeneratedImage | null;
@@ -37,7 +36,6 @@ const AltarView: React.FC<AltarViewProps> = ({ image, language }) => {
   const lastShakeTimeRef = useRef(0);
   const fortuneCardRef = useRef<HTMLDivElement>(null);
 
-  const { apiKey } = useUser();
   const t = UI_STRINGS[language];
   const hasImage = !!image;
 
@@ -79,11 +77,6 @@ const AltarView: React.FC<AltarViewProps> = ({ image, language }) => {
   const handleShakeSiamsi = async (isSensor = false) => {
     if (isShakingRef.current || isStickFalling || showFortuneModal) return;
 
-    if (!apiKey) {
-        alert(language === 'th' ? "กรุณาตั้งค่า API Key ก่อน" : "Please set API Key first");
-        return;
-    }
-
     if (!isSensor && typeof (DeviceMotionEvent as any)?.requestPermission === 'function') {
         try {
             const state = await (DeviceMotionEvent as any).requestPermission();
@@ -109,7 +102,7 @@ const AltarView: React.FC<AltarViewProps> = ({ image, language }) => {
       
       const prompt = image ? image.prompt : "General sacred deity";
       try {
-        const result = await getDailyFortune(apiKey, prompt, language);
+        const result = await getDailyFortune(prompt, language);
         setFortune(result);
       } catch (e) {
         console.error(e);

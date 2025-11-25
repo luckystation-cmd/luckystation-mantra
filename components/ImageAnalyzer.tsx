@@ -3,7 +3,6 @@ import React, { useState, useRef } from 'react';
 import { reverseEngineerPrompt } from '../services/geminiService';
 import { UI_STRINGS } from '../constants';
 import { Language } from '../types';
-import { useUser } from '../contexts/UserContext';
 
 interface ImageAnalyzerProps {
   onUsePrompt: (prompt: string) => void;
@@ -22,9 +21,7 @@ const ImageAnalyzer: React.FC<ImageAnalyzerProps> = ({ onUsePrompt, language }) 
   const [imageUrlInput, setImageUrlInput] = useState('');
   const [isLoadingUrl, setIsLoadingUrl] = useState(false);
   const [urlError, setUrlError] = useState<string | null>(null);
-  const [showKeyError, setShowKeyError] = useState(false);
 
-  const { apiKey } = useUser();
   const fileInputRef = useRef<HTMLInputElement>(null);
   const t = UI_STRINGS[language];
 
@@ -69,15 +66,9 @@ const ImageAnalyzer: React.FC<ImageAnalyzerProps> = ({ onUsePrompt, language }) 
   const handleAnalyze = async () => {
     if (!image) return;
     
-    if (!apiKey) {
-        setShowKeyError(true);
-        setTimeout(() => setShowKeyError(false), 3000);
-        return;
-    }
-
     setIsLoading(true);
     try {
-      const data = await reverseEngineerPrompt(apiKey, image, language);
+      const data = await reverseEngineerPrompt(image, language);
       setResult(data);
     } catch (error) {
       console.error(error);
@@ -177,11 +168,6 @@ const ImageAnalyzer: React.FC<ImageAnalyzerProps> = ({ onUsePrompt, language }) 
 
         {!result && (
             <div className="relative">
-                {showKeyError && (
-                    <div className="absolute bottom-full mb-2 left-0 right-0 bg-red-600/90 text-white text-xs py-2 px-3 rounded-lg text-center animate-bounce">
-                        {language === 'th' ? 'กรุณาตั้งค่า API Key ที่หน้าแรกก่อน' : 'Please set API Key on home screen'}
-                    </div>
-                )}
                 <button
                 onClick={handleAnalyze}
                 disabled={!image || isLoading}

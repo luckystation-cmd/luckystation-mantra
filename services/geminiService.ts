@@ -65,7 +65,6 @@ const OFFLINE_FORTUNES: Record<Language, FortuneResult[]> = {
  * Accepts 'language' to generate the blessing in the correct language.
  */
 export const enhancePrompt = async (
-  apiKey: string,
   userInput: string, 
   style: StyleOption, 
   origin: OriginOption, 
@@ -73,8 +72,7 @@ export const enhancePrompt = async (
   material?: MaterialOption,
   language: Language = 'th'
 ): Promise<{ prompt: string, blessing: string, fontStyleTag?: string }> => {
-  if (!apiKey) throw new Error("API Key is missing");
-  const ai = new GoogleGenAI({ apiKey });
+  const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
 
   // 1. LOOKUP AMULET DICTIONARY
   // Scan input for known amulet keywords to get a precise visual description.
@@ -274,14 +272,12 @@ export const quickConstructPrompt = (
  * Generates an image based on the prompt.
  */
 export const generateImage = async (
-  apiKey: string,
   prompt: string, 
   aspectRatio: "9:16" = "9:16",
   referenceImageBase64?: string,
   styleId?: string
 ): Promise<string> => {
-  if (!apiKey) throw new Error("API Key is missing");
-  const ai = new GoogleGenAI({ apiKey });
+  const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
   
   // Base Negative Prompt (Safety & Quality Guardrails)
   // UPDATED: Aggressive exclusions for UI elements (The Pixlr Fix)
@@ -365,12 +361,10 @@ export const generateImage = async (
  * Accepts 'language' to return analysis in the correct language.
  */
 export const reverseEngineerPrompt = async (
-    apiKey: string,
     base64Image: string, 
     language: Language = 'th'
 ): Promise<{ prompt: string, analysis: string }> => {
-  if (!apiKey) throw new Error("API Key is missing");
-  const ai = new GoogleGenAI({ apiKey });
+  const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
 
   const systemInstruction = `
     **Role:** Expert Art Historian & Reverse Prompt Engineer.
@@ -435,12 +429,10 @@ export const reverseEngineerPrompt = async (
  * Accepts 'language' to generate the prediction in the correct language.
  */
 export const getDailyFortune = async (
-    apiKey: string,
     promptDescription: string, 
     language: Language = 'th'
 ): Promise<FortuneResult> => {
-  if (!apiKey) throw new Error("API Key is missing");
-  const ai = new GoogleGenAI({ apiKey });
+  const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
 
   const systemInstruction = `
     **Role:** Divine Oracle & Astrologer.

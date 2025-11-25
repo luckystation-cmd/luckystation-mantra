@@ -57,7 +57,7 @@ export interface FortuneResult {
   lucky_numbers: string; 
 }
 
-// --- NEW USER ECONOMY TYPES ---
+// --- USER ECONOMY TYPES ---
 
 export interface UserProfile {
   id: string;
@@ -71,9 +71,6 @@ export interface UserProfile {
 
 export interface UserContextType {
   user: UserProfile | null;
-  apiKey: string | null; // NEW: Store API Key
-  setApiKey: (key: string) => void; // NEW: Function to set key
-  removeApiKey: () => void; // NEW: Function to remove key
   login: () => void;
   logout: () => void;
   deductCredit: () => boolean;

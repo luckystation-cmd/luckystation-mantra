@@ -6,26 +6,19 @@ import { audioService } from '../services/audioService';
 const UserContext = createContext<UserContextType | undefined>(undefined);
 
 // Constants
-const WELCOME_CREDITS = 50; // Give 50 credits to match user expectation
+const WELCOME_CREDITS = 50; 
 const DAILY_REWARD = 10;
 const AD_REWARD = 5;
 
 export const UserProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [user, setUser] = useState<UserProfile | null>(null);
-  const [apiKey, setApiKeyState] = useState<string | null>(null);
 
-  // Load user & key from local storage on mount
+  // Load user from local storage on mount
   useEffect(() => {
     const storedUser = localStorage.getItem('luckystation_user');
-    const storedKey = localStorage.getItem('luckystation_api_key');
     
     if (storedUser) {
       setUser(JSON.parse(storedUser));
-    }
-    if (storedKey) {
-      setApiKeyState(storedKey);
-    } else {
-        // If no key, we can still have a guest user, or wait until key input
     }
   }, []);
 
@@ -38,29 +31,15 @@ export const UserProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     }
   }, [user]);
 
-  const setApiKey = (key: string) => {
-    localStorage.setItem('luckystation_api_key', key);
-    setApiKeyState(key);
-    // If setting key for first time and no user, auto-login to give credits
-    if (!user) {
-        login();
-    }
-  };
-
-  const removeApiKey = () => {
-    localStorage.removeItem('luckystation_api_key');
-    setApiKeyState(null);
-  };
-
   const login = () => {
-    // In BYOK mode, "Login" is just creating a local profile
+    // Simulated Google Login for gamification
     const newUser: UserProfile = {
       id: `user_${Date.now()}`,
       name: 'Divine Creator',
-      email: 'creator@luckystation.com',
-      avatar: 'https://api.dicebear.com/7.x/micah/svg?seed=Mantra&backgroundColor=b6e3f4', // Free Avatar API
+      email: 'creator@gmail.com',
+      avatar: 'https://lh3.googleusercontent.com/a/default-user=s96-c', // Generic Google-like avatar
       credits: WELCOME_CREDITS,
-      isVip: true, // BYOK users are VIPs
+      isVip: false,
       lastDailyClaim: null
     };
     
@@ -70,17 +49,15 @@ export const UserProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 
   const logout = () => {
     setUser(null);
-    removeApiKey();
   };
 
   const deductCredit = (): boolean => {
     if (!user) return false;
-    // In BYOK mode, credits are just for fun/gamification
-    // We update the UI counter but don't strictly block if they have their own key
-    // However, for the "Game Feel", we deduct.
     
     if (user.credits <= 0) {
-        // Optional: Can allow negative or stop. Let's allow negative for BYOK so they aren't blocked by fake credits.
+        // In free mode, we allow them to continue even if credits < 0 for better UX,
+        // or we could block. Let's just deduct and show negative or clamp to 0.
+        // For now, let's just subtract.
         setUser(prev => prev ? { ...prev, credits: prev.credits - 1 } : null);
         return true;
     }
@@ -127,9 +104,6 @@ export const UserProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   return (
     <UserContext.Provider value={{ 
       user, 
-      apiKey,
-      setApiKey,
-      removeApiKey,
       login, 
       logout, 
       deductCredit, 

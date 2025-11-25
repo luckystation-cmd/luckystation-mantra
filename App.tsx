@@ -37,13 +37,13 @@ const InnerApp: React.FC = () => {
   const [history, setHistory] = useState<GeneratedImage[]>([]);
 
   // User Overlay State
-  const [showOverlay, setShowOverlay] = useState<'LOGIN' | 'STORE' | 'API_KEY' | null>(null);
+  const [showOverlay, setShowOverlay] = useState<'LOGIN' | 'STORE' | null>(null);
 
   const bgRef = useRef<HTMLDivElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   // Consume User Context
-  const { user, deductCredit, apiKey } = useUser();
+  const { user, deductCredit } = useUser();
 
   const t = UI_STRINGS[language];
 
@@ -67,12 +67,6 @@ const InnerApp: React.FC = () => {
         return;
     }
 
-    // Check API Key
-    if (!apiKey) {
-        setShowOverlay('API_KEY');
-        return;
-    }
-
     // Deduct Credit (Gamification only)
     deductCredit();
     
@@ -88,7 +82,6 @@ const InnerApp: React.FC = () => {
       // 1. Construct/Enhance Prompt
       if (isMagicEnabled) {
          const enhanced = await enhancePrompt(
-             apiKey,
              inputText, 
              selectedStyle, 
              selectedOrigin, 
@@ -111,7 +104,7 @@ const InnerApp: React.FC = () => {
       setStatus(AppStatus.GENERATING);
 
       // 2. Generate Image
-      const imageUrl = await generateImage(apiKey, finalPrompt, "9:16", referenceImage || undefined, selectedStyle.id);
+      const imageUrl = await generateImage(finalPrompt, "9:16", referenceImage || undefined, selectedStyle.id);
       
       const newImage: GeneratedImage = {
         id: Date.now().toString(),
@@ -197,7 +190,7 @@ const InnerApp: React.FC = () => {
         language={language}
         onToggleLanguage={() => setLanguage(l => l === 'th' ? 'en' : 'th')}
         onHome={() => setViewMode('GENERATE')}
-        onOpenLogin={() => setShowOverlay('API_KEY')}
+        onOpenLogin={() => setShowOverlay('LOGIN')}
         onOpenStore={() => setShowOverlay('STORE')}
       />
 

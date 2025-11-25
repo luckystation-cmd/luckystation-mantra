@@ -23,7 +23,7 @@ const Header: React.FC<HeaderProps> = ({
   onOpenLogin,
   onOpenStore
 }) => {
-  const { user, apiKey } = useUser();
+  const { user } = useUser();
 
   return (
     <header className="fixed top-0 left-0 right-0 z-50 transition-all duration-300">
@@ -49,8 +49,8 @@ const Header: React.FC<HeaderProps> = ({
         {/* Right: Actions Group */}
         <div className="flex items-center gap-2 flex-shrink-0">
           
-          {/* USER / KEY SECTION */}
-          {user && apiKey ? (
+          {/* USER STATUS / LOGIN */}
+          {user ? (
             <button 
                 onClick={onOpenStore}
                 className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/5 border border-amber-500/30 hover:bg-white/10 transition-all mr-1"
@@ -58,24 +58,16 @@ const Header: React.FC<HeaderProps> = ({
                 <img src={user.avatar} alt="User" className="w-5 h-5 rounded-full border border-white/20" />
                 <div className="flex items-center gap-1">
                     <span className="text-amber-400 text-sm font-bold">{user.credits}</span>
-                    <span className="text-[10px] text-amber-200/50">🪙</span>
+                    <span className="text-[10px] text-amber-200/50 hidden sm:inline">🪙</span>
                 </div>
             </button>
           ) : (
-            <button 
+             <button 
                 onClick={onOpenLogin}
-                className={`px-3 py-1.5 rounded-full text-white text-xs font-bold shadow-lg transition-all border border-white/10 mr-1 whitespace-nowrap flex items-center gap-1 ${apiKey ? 'bg-gradient-to-r from-green-600 to-emerald-600' : 'bg-gradient-to-r from-red-600 to-amber-600 animate-pulse'}`}
-            >
-                {apiKey ? (
-                    <>
-                    <span className="text-xs">🔐</span> {language === 'th' ? 'พร้อม' : 'Ready'}
-                    </>
-                ) : (
-                    <>
-                    <span className="text-xs">🔑</span> {language === 'th' ? 'ใส่กุญแจ' : 'Set Key'}
-                    </>
-                )}
-            </button>
+                className="px-3 py-1.5 rounded-full bg-white/10 hover:bg-white/20 text-white text-xs font-bold transition-all border border-white/10 mr-1 flex items-center gap-1"
+             >
+                <span className="text-xs">👤</span> {language === 'th' ? 'เข้าสู่ระบบ' : 'Sign In'}
+             </button>
           )}
 
           {/* Language Toggle */}
